@@ -20,7 +20,7 @@ GameScene::~GameScene()
 	delete modelGround;
 	delete modelFighter;
 	delete camera;
-	delete light;
+	delete lightGroup;
 }
 
 void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
@@ -74,9 +74,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	objFighter->SetPosition({ 1,1,0 });
 	objSphere->SetPosition({-1,1,0});
 
-	light = Light::Create();
-	light->SetLightColor({ 1,1,1 });
-	Object3d::SetLight(light);
+	lightGroup = LightGroup::Create();
+	Object3d::SetLightGroup(lightGroup);
 
 }
 
@@ -84,7 +83,7 @@ void GameScene::Update()
 {
 	camera->Update();
 
-	light->Update();
+	lightGroup->Update();
 
 	static XMVECTOR lightDir = { 0,1,5,0 };
 
@@ -100,7 +99,6 @@ void GameScene::Update()
 	else if(input->PushKey(DIK_A)) {
 		lightDir.m128_f32[0] -= 1.0f;
 	}
-	light->SetLightDir(lightDir);
 	std::ostringstream debugstr;
 	debugstr << "lightDirFactor("
 		<< std::fixed << std::setprecision(2)
