@@ -163,12 +163,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CircleShadow.h" />
     <ClInclude Include="DebugCamera.h" />
     <ClInclude Include="DebugText.h" />
     <ClInclude Include="DirectXCommon.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="DirectionalLight.h" />
+    <ClInclude Include="SpotLight.h" />
     <ClInclude Include="LightGroup.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />

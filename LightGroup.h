@@ -2,6 +2,8 @@
 #include <DirectXMath.h>
 #include "DirectionalLight.h"
 #include "PointLight.h"
+#include "SpotLight.h"
+#include "CircleShadow.h"
 
 class LightGroup
 {
@@ -22,6 +24,10 @@ public:
 	static const int DirLightNum = 3;
 	//点光源
 	static const int PointLightNum = 3;
+	//スポットライト
+	static const int SpotLightNum = 3;
+	//丸影
+	static const int CircleShadowNum = 1;
 
 public:
 	struct ConstBufferData
@@ -33,6 +39,10 @@ public:
 		DirectionalLight::ConstBufferData dirLights[DirLightNum];
 		//点光源
 		PointLight::ConstBufferData pointLights[PointLightNum];
+		//スポットライト
+		SpotLight::ConstBufferData spotLights[SpotLightNum];
+		//丸影
+		CircleShadow::ConstBufferData circleShadows[CircleShadowNum];
 	};
 
 	static void StaticInitialize(ID3D12Device* device);
@@ -48,6 +58,10 @@ private:
 	DirectionalLight dirLights_[DirLightNum];
 	//点光源の配列
 	PointLight pointLights_[PointLightNum];
+	//点光源の配列
+	SpotLight spotLights_[SpotLightNum];
+	//丸影の配列
+	CircleShadow circleShadows_[CircleShadowNum];
 	//ダーティフラグ
 	bool dirty_ = false;
 
@@ -72,6 +86,19 @@ public:
 	void SetPointLightPos(int index,const XMFLOAT3& lightpos);
 	void SetPointLightColor(int index, const XMFLOAT3& lightcolor);
 	void SetPointLightAtten(int index, const XMFLOAT3& lightAtten);
-
+	//スポットライト
+	void SetSpotLightActive(int index, bool active);
+	void SetSpotLightDir(int index, const XMVECTOR& lightdir);
+	void SetSpotLightPos(int index, const XMFLOAT3& lightpos);
+	void SetSpotLightColor(int index, const XMFLOAT3& lightcolor);
+	void SetSpotLightAtten(int index, const XMFLOAT3& lightAtten);
+	void SetSpotLightFactorAngle(int index, const XMFLOAT2& lightFactorAngle);
+	//丸影
+	void SetCircleShadowActive(int index, bool active);
+	void SetCircleShadowCasterPos(int index, const XMFLOAT3& casterPos);
+	void SetCircleShadowDir(int index, const XMVECTOR& lightdir);
+	void SetCircleShadowDistanceCaster(int index, float distanceCasterLight);
+	void SetCircleShadowAtten(int index, const XMFLOAT3& lightAtten);
+	void SetCircleShadowFactorAngle(int index, const XMFLOAT2& lightFactorAngle);
 };
 

@@ -24,7 +24,6 @@ struct DirLight {
 
 //点光源
 static const int POINTLIGHT_NUM = 3;
-
 struct PointLight {
 	float3 lightpos;
 	float3 lightcolor;
@@ -32,11 +31,34 @@ struct PointLight {
 	uint active;
 };
 
+//スポットライト
+static const int SPOTLIGHT_NUM = 3;
+struct SpotLight {
+	float3 lightv;
+	float3 lightpos;
+	float3 lightcolor;
+	float3 lightatten;
+	float2 lightfactoranglecos;
+	uint active;
+};
+
+//丸影
+static const int CIRCLESHADOW_NUM = 1;
+struct CircleShadow {
+	float3 dir;
+	float3 casterPos;
+	float distanceCasterLight;
+	float3 atten;
+	float2 factorAngleCos;
+	uint active;
+};
 
 cbuffer cbuff2 : register(b2) {
 	float3 ambientColor;
 	DirLight dirLights[DIRLIGHT_NUM];
 	PointLight pointLights[POINTLIGHT_NUM];
+	SpotLight spotLights[SPOTLIGHT_NUM];
+	CircleShadow circleShadows[CIRCLESHADOW_NUM];
 };
 
 
