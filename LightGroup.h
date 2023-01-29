@@ -57,7 +57,7 @@ public:
 	void SetAmbientColor(const XMFLOAT3& color);
 	void SetDirLightActive(int index, bool active);
 
-	//void SetDirLightDir(int index,const XMVECTOR& lightdir);
-	//void SetDirLightColor(int index, const XMFLOAT3& lightcolor);
+	void SetDirLightDir(int index,const XMVECTOR& lightdir);
+	void SetDirLightColor(int index, const XMFLOAT3& lightcolor);
 };
 

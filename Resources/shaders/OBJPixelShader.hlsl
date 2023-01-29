@@ -8,7 +8,7 @@ float4 main(VSOutput input) : SV_TARGET
 	//テクスチャマッピング
 	float4 texcolor = tex.Sample(smp,input.uv);
 	//シェーディングによる色
-	float4 shadecolor;
+
 	//光沢度
 	const float shininess = 4.0f;
 	//頂点から視点のベクトル
@@ -24,8 +24,7 @@ float4 main(VSOutput input) : SV_TARGET
 	//鏡面反射光
 	//float3 specular = pow(saturate(dot(reflect, eyedir)), shininess) * m_specular;
 	//全てを加算
-	shadecolor.rgb = ambientColor * ambient;
-	shadecolor.a = m_alpha;
+	float4 shadecolor = float4(ambientColor * ambient, m_alpha);
 
 	for (int i = 0; i < DIRLIGHT_NUM; i++) {
 		if (dirLights[i].active) {

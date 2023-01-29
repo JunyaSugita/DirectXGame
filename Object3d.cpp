@@ -18,7 +18,7 @@ ID3D12Device* Object3d::device = nullptr;
 ID3D12GraphicsCommandList* Object3d::sCommandList = nullptr;
 Object3d::PipelineSet Object3d::pipelineSet;
 Camera* Object3d::sCamera_ = nullptr;
-LightGroup* lightGroup_ = nullptr;
+LightGroup* Object3d::lightGroup_ = nullptr;
 
 void Object3d::StaticInitialize(ID3D12Device* device, Camera* camera) {
 	// nullptrチェック

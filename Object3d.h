@@ -96,7 +96,7 @@ private: // 静的メンバ変数
 	static PipelineSet pipelineSet;
 	// カメラ
 	static Camera* sCamera_;
-
+	//ライト
 	static LightGroup* lightGroup_;
 
 public: // メンバ関数

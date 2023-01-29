@@ -9,6 +9,7 @@
 #include <DirectXMath.h>
 #include "LightGroup.h"
 
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -73,4 +74,13 @@ class GameScene {
 	Object3d* objSphere = nullptr;
 
 	LightGroup* lightGroup = nullptr;
+
+	float ambientColor0[3] = { 1,1,1 };
+	//光源方向初期化
+	float lightDir0[3] = { 0,0,1 };
+	float lightColor0[3] = { 1,0,0 };
+	float lightDir1[3] = { 0,1,0 };
+	float lightColor1[3] = { 0,1,0 };
+	float lightDir2[3] = { 1,0,0 };
+	float lightColor2[3] = { 0,0,1 };
 };

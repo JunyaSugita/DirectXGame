@@ -20,7 +20,7 @@ cbuffer cbuff1 : register(b1)
 //}
 struct DirLight {
 	float3 lightv;
-	float4 lightcolor;
+	float3 lightcolor;
 	uint active;
 };
 

@@ -26,26 +26,26 @@ public:
 
 public:
 	//セッター
-	void SetLightDir(const XMVECTOR& lightdir) {
+	inline void SetLightDir(const XMVECTOR& lightdir) {
 		lightdir_ = lightdir;
 	};
-	void SetLightColor(const XMFLOAT3& lightcolor) {
+	inline void SetLightColor(const XMFLOAT3& lightcolor) {
 		lightcolor_ = lightcolor;
 	};
 
-	void SetActive(bool active) {
+	inline void SetActive(bool active) {
 		active_ = active;
 	}
 
 	//ゲッター
-	XMVECTOR GetLightDir() {
+	inline XMVECTOR GetLightDir() {
 		return lightdir_;
 	};
-	XMFLOAT3 GetLightColor() {
+	inline XMFLOAT3 GetLightColor() {
 		return lightcolor_;
 	};
 
-	bool GetIsActive() {
+	inline bool GetIsActive() {
 		return active_;
 	}
 
