@@ -39,5 +39,6 @@ struct VSOutput
 	float4 worldpos : POSITION; // ワールド座標
 	float3 normal :NORMAL; // 法線ベクトル
 	//float4 color : COLOR;
+
 	float2 uv  :TEXCOORD; // uv値
 };
