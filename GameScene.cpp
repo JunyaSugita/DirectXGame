@@ -3,6 +3,7 @@
 #include <cassert>
 #include <sstream>
 #include <iomanip>
+#include <imgui.h>
 
 using namespace DirectX;
 
@@ -20,7 +21,7 @@ GameScene::~GameScene()
 	delete modelGround;
 	delete modelFighter;
 	delete camera;
-	delete light;
+	delete lightGroup;
 }
 
 void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
@@ -40,14 +41,14 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	// テクスチャ読み込み
 	Sprite::LoadTexture(1, L"Resources/background.png");
 
-    // カメラ生成
+	// カメラ生成
 	camera = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight, input);
 
 	// カメラ注視点をセット
-	camera->SetTarget({0, 1, 0});
+	camera->SetTarget({ 0, 1, 0 });
 	camera->SetDistance(3.0f);
 
-    // 3Dオブジェクトにカメラをセット
+	// 3Dオブジェクトにカメラをセット
 	Object3d::SetCamera(camera);
 
 	// 背景スプライト生成
@@ -63,28 +64,25 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 
 	modelSkydome = Model::CreateFromOBJ("skydome");
 	modelGround = Model::CreateFromOBJ("ground");
-	modelFighter = Model::CreateFromOBJ("sphere");
-	modelSphere = Model::CreateFromOBJ("sphere",true);
+	modelFighter = Model::CreateFromOBJ("chr_sword");
+	modelSphere = Model::CreateFromOBJ("sphere", true);
 
 	objSkydome->SetModel(modelSkydome);
 	objGround->SetModel(modelGround);
 	objFighter->SetModel(modelFighter);
 	objSphere->SetModel(modelSphere);
 
-	objFighter->SetPosition({ 1,1,0 });
-	objSphere->SetPosition({-1,1,0});
+	objFighter->SetPosition({ 0,0,0 });
+	objSphere->SetPosition({ 0,0,0 });
 
-	light = Light::Create();
-	light->SetLightColor({ 1,1,1 });
-	Object3d::SetLight(light);
-
+	//ライト
+	lightGroup = LightGroup::Create();
+	Object3d::SetLightGroup(lightGroup);
 }
 
 void GameScene::Update()
 {
 	camera->Update();
-
-	light->Update();
 
 	static XMVECTOR lightDir = { 0,1,5,0 };
 
@@ -97,10 +95,9 @@ void GameScene::Update()
 	if (input->PushKey(DIK_D)) {
 		lightDir.m128_f32[0] += 1.0f;
 	}
-	else if(input->PushKey(DIK_A)) {
+	else if (input->PushKey(DIK_A)) {
 		lightDir.m128_f32[0] -= 1.0f;
 	}
-	light->SetLightDir(lightDir);
 	std::ostringstream debugstr;
 	debugstr << "lightDirFactor("
 		<< std::fixed << std::setprecision(2)
@@ -118,7 +115,7 @@ void GameScene::Update()
 		<< cameraPos.x << ","
 		<< cameraPos.y << ","
 		<< cameraPos.z << ")";
-		debugText.Print(debugstr.str(), 50, 70, 1.0f);
+	debugText.Print(debugstr.str(), 50, 70, 1.0f);
 
 	XMFLOAT3 rot = objSphere->GetRotation();
 	rot.y += 0.5f;
@@ -133,10 +130,33 @@ void GameScene::Update()
 	//debugText.Print("AD: move camera LeftRight", 50, 50, 1.0f);
 	//debugText.Print("WS: move camera UpDown", 50, 70, 1.0f);
 	//debugText.Print("ARROW: move camera FrontBack", 50, 90, 1.0f);
+
+	lightGroup->SetAmbientColor(XMFLOAT3(ambientColor0));
+	lightGroup->SetDirLightDir(0, XMVECTOR({ lightDir0[0],lightDir0[1], lightDir0[2],0 }));
+	lightGroup->SetDirLightColor(0, XMFLOAT3(lightColor0));
+	lightGroup->SetDirLightDir(1, XMVECTOR({ lightDir1[0],lightDir1[1], lightDir1[2],0 }));
+	lightGroup->SetDirLightColor(1, XMFLOAT3(lightColor1));
+	lightGroup->SetDirLightDir(2, XMVECTOR({ lightDir2[0],lightDir2[1], lightDir2[2],0 }));
+	lightGroup->SetDirLightColor(2, XMFLOAT3(lightColor2));
+
+	lightGroup->Update();
 }
 
 void GameScene::Draw()
 {
+	//imgui
+	ImGui::Begin("Light");
+	ImGui::SetWindowPos(ImVec2(0, 0));
+	ImGui::SetWindowSize(ImVec2(500, 200));
+	ImGui::ColorEdit3("anbientColor", ambientColor0, ImGuiColorEditFlags_Float);
+	ImGui::InputFloat3("lightDir0", lightDir0);
+	ImGui::ColorEdit3("lightColor0", lightColor0, ImGuiColorEditFlags_Float);
+	ImGui::InputFloat3("lightDir1", lightDir1);
+	ImGui::ColorEdit3("lightColor1", lightColor1, ImGuiColorEditFlags_Float);
+	ImGui::InputFloat3("lightDir2", lightDir2);
+	ImGui::ColorEdit3("lightColor2", lightColor2, ImGuiColorEditFlags_Float);
+	ImGui::End();
+
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* cmdList = dxCommon->GetCommandList();
 
@@ -163,7 +183,7 @@ void GameScene::Draw()
 	// 3Dオブクジェクトの描画
 	//objSkydome->Draw();
 	//objGround->Draw();
-	objFighter->Draw();
+	//objFighter->Draw();
 	objSphere->Draw();
 
 	/// <summary>
