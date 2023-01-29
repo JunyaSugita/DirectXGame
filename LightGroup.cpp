@@ -62,6 +62,7 @@ void LightGroup::TransferConstBuffer()
 	result = constBuff_->Map(0, nullptr, (void**)&constMap);
 	if (SUCCEEDED(result)) {
 		constMap->ambientColor = ambientColor_;
+		//ïΩçsåı
 		for (int i = 0; i < DirLightNum; i++) {
 			if (dirLights_[i].GetIsActive()) {
 				constMap->dirLights[i].active = 1;
@@ -72,6 +73,19 @@ void LightGroup::TransferConstBuffer()
 				constMap->dirLights[i].active = 0;
 			}
 		}
+		//ì_åıåπ
+		for (int i = 0; i < PointLightNum; i++) {
+			if (pointLights_[i].GetIsActive()) {
+				constMap->pointLights[i].active = 1;
+				constMap->pointLights[i].lightpos = pointLights_[i].GetLightPos();
+				constMap->pointLights[i].lightcolor = pointLights_[i].GetLightColor();
+				constMap->pointLights[i].lightatten = pointLights_[i].GetLightAtten();
+			}
+			else {
+				constMap->pointLights[i].active = 0;
+			}
+		}
+
 
 		constBuff_->Unmap(0, nullptr);
 	}
@@ -109,6 +123,33 @@ void LightGroup::SetDirLightColor(int index, const XMFLOAT3& lightcolor)
 {
 	assert(0 <= index && index < DirLightNum);
 	dirLights_[index].SetLightColor(lightcolor);
+	dirty_ = true;
+}
+
+void LightGroup::SetPointLightActive(int index, bool active)
+{
+	assert(0 <= index && index < PointLightNum);
+	pointLights_[index].SetActive(active);
+}
+
+void LightGroup::SetPointLightPos(int index, const XMFLOAT3& lightpos)
+{
+	assert(0 <= index && index < PointLightNum);
+	pointLights_[index].SetLightPos(lightpos);
+	dirty_ = true;
+}
+
+void LightGroup::SetPointLightColor(int index, const XMFLOAT3& lightcolor)
+{
+	assert(0 <= index && index < PointLightNum);
+	pointLights_[index].SetLightColor(lightcolor);
+	dirty_ = true;
+}
+
+void LightGroup::SetPointLightAtten(int index, const XMFLOAT3& lightAtten)
+{
+	assert(0 <= index && index < PointLightNum);
+	pointLights_[index].SetLightAtten(lightAtten);
 	dirty_ = true;
 }
 

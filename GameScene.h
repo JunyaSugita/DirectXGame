@@ -83,4 +83,8 @@ class GameScene {
 	float lightColor1[3] = { 0,1,0 };
 	float lightDir2[3] = { 1,0,0 };
 	float lightColor2[3] = { 0,0,1 };
+	//点光源
+	float pointLightPos[3] = { 0,0,0 };
+	float pointLightColor[3] = { 1,1,1 };
+	float pointLightAtten[3] = { 0.3f,0.1f,0.1f };
 };

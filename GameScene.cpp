@@ -72,12 +72,20 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	objFighter->SetModel(modelFighter);
 	objSphere->SetModel(modelSphere);
 
-	objFighter->SetPosition({ 0,0,0 });
-	objSphere->SetPosition({ 0,0,0 });
+	objFighter->SetPosition({ 1,0,0 });
+	objSphere->SetPosition({ -1,0,0 });
 
 	//ライト
 	lightGroup = LightGroup::Create();
 	Object3d::SetLightGroup(lightGroup);
+	lightGroup->SetDirLightActive(0, false);
+	lightGroup->SetDirLightActive(1, false);
+	lightGroup->SetDirLightActive(2, false);
+	lightGroup->SetPointLightActive(0, true);
+	pointLightPos[0] = 0.5f;
+	pointLightPos[1] = 1.0f;
+	pointLightPos[2] = 0.0f;
+
 }
 
 void GameScene::Update()
@@ -130,15 +138,18 @@ void GameScene::Update()
 	//debugText.Print("AD: move camera LeftRight", 50, 50, 1.0f);
 	//debugText.Print("WS: move camera UpDown", 50, 70, 1.0f);
 	//debugText.Print("ARROW: move camera FrontBack", 50, 90, 1.0f);
-
-	lightGroup->SetAmbientColor(XMFLOAT3(ambientColor0));
-	lightGroup->SetDirLightDir(0, XMVECTOR({ lightDir0[0],lightDir0[1], lightDir0[2],0 }));
-	lightGroup->SetDirLightColor(0, XMFLOAT3(lightColor0));
-	lightGroup->SetDirLightDir(1, XMVECTOR({ lightDir1[0],lightDir1[1], lightDir1[2],0 }));
-	lightGroup->SetDirLightColor(1, XMFLOAT3(lightColor1));
-	lightGroup->SetDirLightDir(2, XMVECTOR({ lightDir2[0],lightDir2[1], lightDir2[2],0 }));
-	lightGroup->SetDirLightColor(2, XMFLOAT3(lightColor2));
-
+	{
+		//lightGroup->SetAmbientColor(XMFLOAT3(ambientColor0));
+		//lightGroup->SetDirLightDir(0, XMVECTOR({ lightDir0[0],lightDir0[1], lightDir0[2],0 }));
+		//lightGroup->SetDirLightColor(0, XMFLOAT3(lightColor0));
+		//lightGroup->SetDirLightDir(1, XMVECTOR({ lightDir1[0],lightDir1[1], lightDir1[2],0 }));
+		//lightGroup->SetDirLightColor(1, XMFLOAT3(lightColor1));
+		//lightGroup->SetDirLightDir(2, XMVECTOR({ lightDir2[0],lightDir2[1], lightDir2[2],0 }));
+		//lightGroup->SetDirLightColor(2, XMFLOAT3(lightColor2));
+		lightGroup->SetPointLightPos(0, XMFLOAT3(pointLightPos));
+		lightGroup->SetPointLightColor(0, XMFLOAT3(pointLightColor));
+		lightGroup->SetPointLightAtten(0, XMFLOAT3(pointLightAtten));
+	}
 	lightGroup->Update();
 }
 
@@ -148,13 +159,16 @@ void GameScene::Draw()
 	ImGui::Begin("Light");
 	ImGui::SetWindowPos(ImVec2(0, 0));
 	ImGui::SetWindowSize(ImVec2(500, 200));
-	ImGui::ColorEdit3("anbientColor", ambientColor0, ImGuiColorEditFlags_Float);
-	ImGui::InputFloat3("lightDir0", lightDir0);
-	ImGui::ColorEdit3("lightColor0", lightColor0, ImGuiColorEditFlags_Float);
-	ImGui::InputFloat3("lightDir1", lightDir1);
-	ImGui::ColorEdit3("lightColor1", lightColor1, ImGuiColorEditFlags_Float);
-	ImGui::InputFloat3("lightDir2", lightDir2);
-	ImGui::ColorEdit3("lightColor2", lightColor2, ImGuiColorEditFlags_Float);
+	//ImGui::ColorEdit3("anbientColor", ambientColor0, ImGuiColorEditFlags_Float);
+	//ImGui::InputFloat3("lightDir0", lightDir0);
+	//ImGui::ColorEdit3("lightColor0", lightColor0, ImGuiColorEditFlags_Float);
+	//ImGui::InputFloat3("lightDir1", lightDir1);
+	//ImGui::ColorEdit3("lightColor1", lightColor1, ImGuiColorEditFlags_Float);
+	//ImGui::InputFloat3("lightDir2", lightDir2);
+	//ImGui::ColorEdit3("lightColor2", lightColor2, ImGuiColorEditFlags_Float);
+	ImGui::ColorEdit3("pointLightColor", pointLightColor, ImGuiColorEditFlags_Float);
+	ImGui::InputFloat3("pointLightPos", pointLightPos);
+	ImGui::InputFloat3("pointLightAtten", pointLightAtten);
 	ImGui::End();
 
 	// コマンドリストの取得
@@ -181,9 +195,9 @@ void GameScene::Draw()
 	Object3d::PreDraw(cmdList);
 
 	// 3Dオブクジェクトの描画
-	//objSkydome->Draw();
-	//objGround->Draw();
-	//objFighter->Draw();
+	objSkydome->Draw();
+	objGround->Draw();
+	objFighter->Draw();
 	objSphere->Draw();
 
 	/// <summary>

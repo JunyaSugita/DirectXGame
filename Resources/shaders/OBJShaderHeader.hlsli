@@ -14,21 +14,29 @@ cbuffer cbuff1 : register(b1)
 	float m_alpha : packoffset(c2.w);	// アルファ
 };
 
-//cbuffer cbuff2 : register(b2) {
-//	float3 lightv;
-//	float3 lightcolor;
-//}
+//平行光
+static const int DIRLIGHT_NUM = 3;
 struct DirLight {
 	float3 lightv;
 	float3 lightcolor;
 	uint active;
 };
 
-static const int DIRLIGHT_NUM = 3;
+//点光源
+static const int POINTLIGHT_NUM = 3;
+
+struct PointLight {
+	float3 lightpos;
+	float3 lightcolor;
+	float3 lightatten;
+	uint active;
+};
+
 
 cbuffer cbuff2 : register(b2) {
 	float3 ambientColor;
 	DirLight dirLights[DIRLIGHT_NUM];
+	PointLight pointLights[POINTLIGHT_NUM];
 };
 
 

@@ -1,6 +1,7 @@
 #pragma once
 #include <DirectXMath.h>
 #include "DirectionalLight.h"
+#include "PointLight.h"
 
 class LightGroup
 {
@@ -17,7 +18,10 @@ private:
 	static ID3D12Device* device;
 
 public:
+	//平行光
 	static const int DirLightNum = 3;
+	//点光源
+	static const int PointLightNum = 3;
 
 public:
 	struct ConstBufferData
@@ -27,6 +31,8 @@ public:
 		float pad1;
 		//平行光線用
 		DirectionalLight::ConstBufferData dirLights[DirLightNum];
+		//点光源
+		PointLight::ConstBufferData pointLights[PointLightNum];
 	};
 
 	static void StaticInitialize(ID3D12Device* device);
@@ -40,6 +46,8 @@ private:
 	XMFLOAT3 ambientColor_ = { 1,1,1 };
 	//平行光線の配列
 	DirectionalLight dirLights_[DirLightNum];
+	//点光源の配列
+	PointLight pointLights_[PointLightNum];
 	//ダーティフラグ
 	bool dirty_ = false;
 
@@ -55,9 +63,15 @@ public:
 	void Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParameterIndex);
 
 	void SetAmbientColor(const XMFLOAT3& color);
+	//平行光
 	void SetDirLightActive(int index, bool active);
-
 	void SetDirLightDir(int index,const XMVECTOR& lightdir);
 	void SetDirLightColor(int index, const XMFLOAT3& lightcolor);
+	//点光源
+	void SetPointLightActive(int index, bool active);
+	void SetPointLightPos(int index,const XMFLOAT3& lightpos);
+	void SetPointLightColor(int index, const XMFLOAT3& lightcolor);
+	void SetPointLightAtten(int index, const XMFLOAT3& lightAtten);
+
 };
 
